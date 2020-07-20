@@ -62,6 +62,7 @@ def start(file1, file2):
     secondSTD(file2)
     diffSTD(file1)
     print(diff)
+    diff.to_csv(r'C:/Users/k9wad/OneDrive/Documents/GitHub/FileCompare/Diff.csv')
     
     
 file1 = pd.read_csv(r'C:\Users\k9wad\Downloads\LI Base.csv')
@@ -73,14 +74,4 @@ diff = diff.set_index('attributes')
 
 start(file1, file2)
 
-#print(len(file1))
-#print(file1.shape)
-#print(file1.head())
-#file1.info()
-#print(file1.columns)
-#print(file2.columns)
-#print("time_ms" in file1.keys())
-#print(file1.describe())
-#print(file1["time_ms"].max())
-#print(file1.loc["seq"].std())
 

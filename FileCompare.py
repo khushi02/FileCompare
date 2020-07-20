@@ -8,12 +8,12 @@ Created on Thu Jul  9 15:55:35 2020
 """
 *can compare -> figure out if the two files are comparable
 cleanup -> clean data
-total -> return length
-total diff -> return total differences
+*total -> return len
+num diff -> return num differences
 percent diff -> return percent different
-total higher -> return total higher values
+num higher -> return num higher values
 percent higher -> return percent higher values
-total lower -> return total lower values
+num lower -> return num lower values
 percent lower -> return percent lower values
 *first mean -> return mean of first file
 *second mean -> return mean of second file
@@ -30,6 +30,10 @@ import numpy as np
 def canCompare(file1, file2):
     return file1.columns.equals(file2.columns)
 
+#update w cleaned data
+def total(file1):
+    len(file1)
+
 def firstMean(file1):
     np.mean(file1, axis=0)
     
@@ -37,7 +41,6 @@ def secondMean(file2):
     np.mean(file2, axis=0)
     
 def diffMean(file1, file2):
-    # should this be absolute?
     # should I create variables?
     np.subtract(np.mean(file1, axis=0), np.mean(file2, axis=0))
     
@@ -48,12 +51,15 @@ def secondSTD(file2):
     np.std(file2, axis=0)
     
 def diffSTD(file1):
-    # should this be absolute?
     # should I create variables?
     np.subtract(np.std(file1, axis=0), np.std(file2, axis=0))
+ 
     
 file1 = pd.read_csv(r'C:\Users\k9wad\Downloads\LI Base.csv')
+file1 = file1.select_dtypes([np.number])
 file2 = pd.read_csv(r'C:\Users\k9wad\Downloads\LI Test.csv')
+file2 = file2.select_dtypes([np.number])
+diff = pd.DataFrame()
 
 print(canCompare(file1, file2))
 print(np.subtract(np.std(file1, axis=0), np.std(file2, axis=0)))

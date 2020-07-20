@@ -32,37 +32,46 @@ def canCompare(file1, file2):
 
 #update w cleaned data
 def total(file1):
-    len(file1)
+    diff['total'] = len(file1)
 
 def firstMean(file1):
-    np.mean(file1, axis=0)
+    diff['mean f1'] = np.mean(file1, axis=0)
     
 def secondMean(file2):
-    np.mean(file2, axis=0)
+    diff['mean f2'] = np.mean(file2, axis=0)
     
 def diffMean(file1, file2):
-    # should I create variables?
-    np.subtract(np.mean(file1, axis=0), np.mean(file2, axis=0))
+    diff['mean diff'] = np.subtract(np.mean(file1, axis=0), np.mean(file2, axis=0))
     
 def firstSTD(file1):
-    np.std(file1, axis=0)
+    diff['std f1'] = np.std(file1, axis=0)
     
 def secondSTD(file2):
-    np.std(file2, axis=0)
+    diff['std f2'] = np.std(file2, axis=0)
     
 def diffSTD(file1):
-    # should I create variables?
-    np.subtract(np.std(file1, axis=0), np.std(file2, axis=0))
- 
+    diff['std diff'] = np.subtract(np.std(file1, axis=0), np.std(file2, axis=0))
+
+def start(file1, file2):
+    total(file1)
+    firstMean(file1)
+    secondMean(file2)
+    diffMean(file1, file2)
+    firstSTD(file1)
+    secondSTD(file2)
+    secondSTD(file2)
+    diffSTD(file1)
+    print(diff)
+    
     
 file1 = pd.read_csv(r'C:\Users\k9wad\Downloads\LI Base.csv')
-file1 = file1.select_dtypes([np.number])
+file1 = file1.select_dtypes(exclude=['object'])
 file2 = pd.read_csv(r'C:\Users\k9wad\Downloads\LI Test.csv')
-file2 = file2.select_dtypes([np.number])
-diff = pd.DataFrame()
+file2 = file2.select_dtypes(exclude=['object'])
+diff = pd.DataFrame(data=file1.columns, columns=['attributes'])
+diff = diff.set_index('attributes')
 
-print(canCompare(file1, file2))
-print(np.subtract(np.std(file1, axis=0), np.std(file2, axis=0)))
+start(file1, file2)
 
 #print(len(file1))
 #print(file1.shape)

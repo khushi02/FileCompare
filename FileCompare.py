@@ -75,8 +75,8 @@ def start(file1, file2):
         print("Files are not compatable")
     
 # Import files
-file1 = pd.read_csv(r'C:\Users\k9wad\Downloads\LI Base.csv')
-file2 = pd.read_csv(r'C:\Users\k9wad\Downloads\LI Test.csv')
+file1 = pd.read_csv(r'C:/Users/k9wad/Downloads/LI Base full.csv')
+file2 = pd.read_csv(r'C:/Users/k9wad/Downloads/LI Test full.csv')
 
 # Cleanup data
 file1 = file1.select_dtypes(exclude=['object'])

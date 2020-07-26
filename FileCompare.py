@@ -31,45 +31,56 @@ import numpy as np
 def canCompare(file1, file2):
     return file1.columns.equals(file2.columns)
 
-# Output the total number of rows
-def total(file1):
+# Output the total number of rows, num/percent differences, num/percent higher, num/percent lower
+def compare(file1, file2):
     diff['total'] = len(file1)
-
-# Output the mean of each column in file 1
-def firstMean(file1):
+    higher = 0
+    lower = 0 
+    count = 0
+    #compDF = pd.DataFrame(np.greater(file1, file2))
+    numHigh = np.ndarray(shape=(1, len(file1.columns)))
+    numLow = np.ndarray(shape=(1, len(file1.columns)))
+    numDiff = np.ndarray(shape=(1, len(file1.columns)))
+    for col in file1.columns:
+        for index, row in file1.iterrows():
+            if (file1[index][col] > file1[index][col]):
+                higher += 1
+                count += 1
+            elif (file1[index][col] < file1[index][col]):
+                lower += 1
+                count += 1
+            else:
+                break
+            
+        numHigh.append(higher)
+        numLow.append(lower)
+        numDiff.append(count)
+        higher = 0
+        lower = 0
+        count = 0
+        
+    diff['num diff'] = numDiff
+    diff['num higher'] = numHigh
+    diff['num lower'] = numLow
+        
+# Output the mean of each column and the difference in both files
+def mean(file1, file2):
     diff['mean f1'] = np.mean(file1, axis=0)
-    
-# Output the mean of each column in file 2
-def secondMean(file2):
     diff['mean f2'] = np.mean(file2, axis=0)
-
-# Output the difference in the means of both files
-def diffMean(file1, file2):
     diff['mean diff'] = np.subtract(np.mean(file1, axis=0), np.mean(file2, axis=0))
 
-# Output the standard deviation of each column in file 1
-def firstSTD(file1):
+# Output the standard deviation of each column and the difference in both files
+def std(file1, file2):
     diff['std f1'] = np.std(file1, axis=0)
-
-# Output the standard deviation of each column in file 2
-def secondSTD(file2):
     diff['std f2'] = np.std(file2, axis=0)
-
-# Output the difference in the standard deviations of both files
-def diffSTD(file1):
     diff['std diff'] = np.subtract(np.std(file1, axis=0), np.std(file2, axis=0))
 
 # Execute the script in the correct order
 def start(file1, file2):
     if (canCompare(file1, file2)):
-        total(file1)
-        firstMean(file1)
-        secondMean(file2)
-        diffMean(file1, file2)
-        firstSTD(file1)
-        secondSTD(file2)
-        secondSTD(file2)
-        diffSTD(file1)
+        compare(file1, file2)
+        mean(file1, file2)
+        std(file1, file2)
         diff.to_csv(r'C:/Users/k9wad/OneDrive/Documents/GitHub/FileCompare/Diff.csv')
     else:
         print("Files are not compatable")
@@ -81,13 +92,15 @@ file2 = pd.read_csv(r'C:/Users/k9wad/Downloads/LI Test full.csv')
 # Cleanup data
 file1 = file1.select_dtypes(exclude=['object'])
 file2 = file2.select_dtypes(exclude=['object'])
+col1 = file1.columns.str.strip()
+col2 = file2.columns.str.strip()
 
 # Setup output
 diff = pd.DataFrame(data=file1.columns, columns=['attributes'])
 diff = diff.set_index('attributes')
 
 # Execute script
-start(file1, file2)
+#start(file1, file2)
+#print(diff)
+compare(file1, file2)
 print(diff)
-
-

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Jul  9 15:55:35 2020
-
 @author: k9wad
 """
 
@@ -38,28 +37,34 @@ def compare(file1, file2):
     dct1 = file1.to_dict('list')
     dct2 = file2.to_dict('list')
     
+    numDiff = np.array([])
+    numSame = np.array([])
     numHigh = np.array([])
     numLow = np.array([])
-    numDiff = np.array([])
     for i in dct1:
         higher = 0
         lower = 0 
-        count = 0
+        change = 0
+        same = 0
         for (j, k) in it.zip_longest(dct1[i], dct2[i]):
             if (k > j):
                 higher += 1
-                count += 1
+                change += 1
             elif (k < j):
                 lower += 1
-                count += 1
+                change += 1
             else:
-                continue
+                same += 1
+        numDiff = np.append(numDiff, change)
+        numSame = np.append(numSame, same)
         numHigh = np.append(numHigh, higher)
         numLow = np.append(numLow, lower)
-        numDiff = np.append(numDiff, count)
+        
     
     diff['num diff'] = numDiff
     diff['pct diff'] = (numDiff/len(file1))*100
+    diff['num same'] = numSame
+    diff['pct same'] = (numSame/len(file1))*100
     diff['num higher'] = numHigh
     diff['pct higher'] = (numHigh/len(file1))*100
     diff['num lower'] = numLow
@@ -94,8 +99,6 @@ file2 = pd.read_csv(r'C:/Users/k9wad/Downloads/LI Test full.csv')
 # Cleanup data
 file1 = file1.select_dtypes(exclude=['object'])
 file2 = file2.select_dtypes(exclude=['object'])
-col1 = file1.columns.str.strip()
-col2 = file2.columns.str.strip()
 
 # Setup output
 diff = pd.DataFrame(data=file1.columns, columns=['attributes'])

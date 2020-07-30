@@ -26,6 +26,7 @@ optional: min, max, 25%, 50%, 75%
 
 import pandas as pd
 import numpy as np
+import itertools as it
 
 # Check if the files can be compared
 def canCompare(file1, file2):
@@ -34,34 +35,35 @@ def canCompare(file1, file2):
 # Output the total number of rows, num/percent differences, num/percent higher, num/percent lower
 def compare(file1, file2):
     diff['total'] = len(file1)
-    higher = 0
-    lower = 0 
-    count = 0
-    #compDF = pd.DataFrame(np.greater(file1, file2))
-    numHigh = np.ndarray(shape=(1, len(file1.columns)))
-    numLow = np.ndarray(shape=(1, len(file1.columns)))
-    numDiff = np.ndarray(shape=(1, len(file1.columns)))
-    for col in file1.columns:
-        for index, row in file1.iterrows():
-            if (file1[index][col] > file1[index][col]):
+    dct1 = file1.to_dict('list')
+    dct2 = file2.to_dict('list')
+    
+    numHigh = np.array([])
+    numLow = np.array([])
+    numDiff = np.array([])
+    for i in dct1:
+        higher = 0
+        lower = 0 
+        count = 0
+        for (j, k) in it.zip_longest(dct1[i], dct2[i]):
+            if (k > j):
                 higher += 1
                 count += 1
-            elif (file1[index][col] < file1[index][col]):
+            elif (k < j):
                 lower += 1
                 count += 1
             else:
-                break
-            
-        numHigh.append(higher)
-        numLow.append(lower)
-        numDiff.append(count)
-        higher = 0
-        lower = 0
-        count = 0
-        
+                continue
+        numHigh = np.append(numHigh, higher)
+        numLow = np.append(numLow, lower)
+        numDiff = np.append(numDiff, count)
+    
     diff['num diff'] = numDiff
+    diff['pct diff'] = (numDiff/len(file1))*100
     diff['num higher'] = numHigh
+    diff['pct higher'] = (numHigh/len(file1))*100
     diff['num lower'] = numLow
+    diff['pct lower'] = (numLow/len(file1))*100
         
 # Output the mean of each column and the difference in both files
 def mean(file1, file2):
@@ -100,7 +102,5 @@ diff = pd.DataFrame(data=file1.columns, columns=['attributes'])
 diff = diff.set_index('attributes')
 
 # Execute script
-#start(file1, file2)
-#print(diff)
-compare(file1, file2)
+start(file1, file2)
 print(diff)

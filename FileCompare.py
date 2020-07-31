@@ -94,8 +94,8 @@ def get_file_name(file_entry):
 def run_and_close(event=None):
     
     # Read the csv files
-    file1 = pd.read_csv(entry_csv.get())
-    file2 = pd.read_csv(entry_csv2.get())
+    file1 = pd.read_csv(inputCSV.get())
+    file2 = pd.read_csv(inputCSV2.get())
     
     # Cleanup the data (remove strings)
     file1 = file1.select_dtypes(exclude=['object'])
@@ -120,16 +120,16 @@ master = Tk()
 master.title("File Compare")
 
 # First file search
-entry_csv=Entry(master, text="", width=50)
-entry_csv.grid(row=0, column=1, sticky=W, padx=5)
-Label(master, text="Input CSV").grid(row=0, column=0 ,sticky=W)
-Button(master, text="Browse...", width=10, command=lambda:get_file_name(entry_csv)).grid(row=0, column=2, sticky=W)
+inputCSV=Entry(master, text="", width=50)
+inputCSV.grid(row=0, column=1, sticky=W, padx=5)
+Label(master, text="Input CSV Base").grid(row=0, column=0 ,sticky=W)
+Button(master, text="Browse...", width=10, command=lambda:get_file_name(inputCSV)).grid(row=0, column=2, sticky=W)
 
 # Second file search
-entry_csv2=Entry(master, text="", width=50)
-entry_csv2.grid(row=1, column=1, sticky=W, padx=5)
-Label(master, text="Input CSV").grid(row=1, column=0 ,sticky=W)
-Button(master, text="Browse...", width=10, command=lambda:get_file_name(entry_csv2)).grid(row=1, column=2, sticky=W)
+inputCSV2=Entry(master, text="", width=50)
+inputCSV2.grid(row=1, column=1, sticky=W, padx=5)
+Label(master, text="Input CSV Test").grid(row=1, column=0 ,sticky=W)
+Button(master, text="Browse...", width=10, command=lambda:get_file_name(inputCSV2)).grid(row=1, column=2, sticky=W)
 
 # Run process and cancel process
 Button(master, text="Ok",     command=run_and_close, width=10).grid(row=3, column=1, sticky=E, padx=5)
